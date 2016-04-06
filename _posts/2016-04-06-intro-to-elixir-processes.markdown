@@ -27,37 +27,41 @@ We’re going to start with a simple example I found as a now-do-it-yourself exa
 
 If you’re following along, type or copy the following code into “echo.ex”
 
-    defmodule Echo do
-      def listen do
-        receive do
-          {sender, token} -> send sender, {self, token}
-        end
-      end
-
-      def run(token1, token2) do
-        pid1 = spawn(Echo, :listen, [])
-        pid2 = spawn(Echo, :listen, [])
-
-        send pid1, {self, token1}
-        send pid2, {self, token2}
-
-        receive do
-          {^pid1, token} -> IO.puts token
-        end
-        receive do
-          {^pid2, token} -> IO.puts token
-        end
-      end
+{% highlight elixir %}
+defmodule Echo do
+  def listen do
+    receive do
+      {sender, token} -> send sender, {self, token}
     end
+  end
+
+  def run(token1, token2) do
+    pid1 = spawn(Echo, :listen, [])
+    pid2 = spawn(Echo, :listen, [])
+
+    send pid1, {self, token1}
+    send pid2, {self, token2}
+
+    receive do
+      {^pid1, token} -> IO.puts token
+    end
+    receive do
+      {^pid2, token} -> IO.puts token
+    end
+  end
+end
+{% endhighlight %}
 
 Then, fire up iEX and run:
 
-    iex> c(“echo.ex”)
-    [Echo]
-    iex> Echo.run(“dear”, “reader”)
-    dear
-    reader
-    :ok
+{% highlight iex %}
+iex> c(“echo.ex”)
+[Echo]
+iex> Echo.run(“dear”, “reader”)
+dear
+reader
+:ok
+{% endhighlight %}
 
 Let’s walk through this code quickly to see what’s going on here.
 
@@ -85,26 +89,28 @@ Let’s walk through this code quickly to see what’s going on here.
 
 Simple enough. But what’s with the two `receive` blocks at the end of `run`? Shouldn’t we be able to combine the two and have a single `receive` block with two match clauses? Let’s give that a try.
 
-    defmodule Echo do
-      def listen do
-        receive do
-          {sender, token} -> send sender, {self, token}
-        end
-      end
-
-      def run(token1, token2) do
-        pid1 = spawn(Echo, :listen, [])
-        pid2 = spawn(Echo, :listen, [])
-
-        send pid1, {self, token1}
-        send pid2, {self, token2}
-
-        receive do
-          {^pid1, token} -> IO.puts token
-          {^pid2, token} -> IO.puts token
-        end
-      end
+{% highlight elixir %}
+defmodule Echo do
+  def listen do
+    receive do
+      {sender, token} -> send sender, {self, token}
     end
+  end
+
+  def run(token1, token2) do
+    pid1 = spawn(Echo, :listen, [])
+    pid2 = spawn(Echo, :listen, [])
+
+    send pid1, {self, token1}
+    send pid2, {self, token2}
+
+    receive do
+      {^pid1, token} -> IO.puts token
+      {^pid2, token} -> IO.puts token
+    end
+  end
+end
+{% endhighlight %}
 
 And we run it:
 
@@ -117,29 +123,31 @@ And we run it:
 What happened to the `reader`? This was one of the first things it took me a little while to remember: any `receive` block only runs once. It’s listening to a potentially endless stream messages coming into the current process's mailbox), but once it receives a matching message, it’s done. We
 can also demonstrate this by sending multiple messages to one of our `listen` processes:
 
-    defmodule Echo do
-      def listen do
-        receive do
-          {sender, token} -> send sender, {self, token}
-        end
-      end
-
-      def run(token1, token2) do
-        pid1 = spawn(Echo, :listen, [])
-        pid2 = spawn(Echo, :listen, [])
-
-        send pid1, {self, token1}
-        send pid1, {self, token1}
-        send pid2, {self, token2}
-
-        receive do
-          {^pid1, token} -> IO.puts token
-        end
-        receive do
-          {^pid2, token} -> IO.puts token
-        end
-      end
+{% highlight elixir %}
+defmodule Echo do
+  def listen do
+    receive do
+      {sender, token} -> send sender, {self, token}
     end
+  end
+
+  def run(token1, token2) do
+    pid1 = spawn(Echo, :listen, [])
+    pid2 = spawn(Echo, :listen, [])
+
+    send pid1, {self, token1}
+    send pid1, {self, token1}
+    send pid2, {self, token2}
+
+    receive do
+      {^pid1, token} -> IO.puts token
+    end
+    receive do
+      {^pid2, token} -> IO.puts token
+    end
+  end
+end
+{% endhighlight %}
 
 And we run it:
 
@@ -153,47 +161,57 @@ And we run it:
 
 We receive and print the first "dear," but then that first `receive` is finished. We move on to the next one, but it doesn't match the first message in the process mailbox, which is another "dear," so it goes on to the second one, which is "reader," which matches, and the function terminates.
 
-So we need a `receive` block to listen for each incoming message. And, if you run the code a number of times, you’ll see that the tokens are always printed in the same order. That’s because the receive blocks are processed in order. One waits until ti receives a message, then goes on to the next one. You can confirm this for yourself by switching their order in your code and running it. You should see that the second token is now always printed first.
+So we need a `receive` block to listen for each incoming message. And, if you run the code a number of times, you’ll see that the tokens are always printed in the same order. That’s because the receive blocks are processed in order. One waits until it receives a message, then goes on to the next one. You can confirm this for yourself by switching their order in your code and running it. You should see that the second token is now always printed first.
 
 This is all simple enough when we know we’ll only be receiving two messages. But out in the real world, it’s rare that we can predict this with any measure of reasonability. So let’s make `Echo` behave a bit more like a real piece of code might:
 
-    defmodule Echo do
-      def listen do
-        receive do
-          {sender, token} -> send sender, {self, token}
-        end
-      end
-
-
-      def run(tokens) do
-        pids = Enum.map(tokens, fn token -> {spawn(Echo, :listen, []), token} end)
-        Enum.map(pids, fn {pid, token} -> send pid, {self, token} end)
-
-        ...
-      end
+{% highlight elixir %}
+defmodule Echo do
+  def listen do
+    receive do
+      {sender, token} -> send sender, {self, token}
     end
+  end
+
+  def run(tokens) do
+    pids = Enum.map(tokens, fn token ->
+      {spawn(Echo, :listen, []), token}
+    end)
+    Enum.map(pids, fn {pid, token} ->
+      send pid, {self, token}
+    end)
+
+    ...
+  end
+end
+{% endhighlight %}
 
 So far, so good, we can spawn the correct number of processes, and send a token to each one. But how do we make sure we’ll be listening for each response? One way is to continue using the Enum.map:
 
-    defmodule Echo do
-      def listen do
-        receive do
-          {sender, token} -> send sender, {self, token}
-        end
-      end
-
-      def run(tokens) do
-        pids = Enum.map(tokens, fn token -> {spawn(Echo, :listen, []), token} end)
-        Enum.map(pids, fn {pid, token} -> send pid, {self, token} end)
-
-        Enum.map(pids, fn {pid, token} ->
-          receive do
-            {^pid, ^token} -> IO.puts token
-          end
-        end)
-      end
+{% highlight elixir %}
+defmodule Echo do
+  def listen do
+    receive do
+      {sender, token} -> send sender, {self, token}
     end
+  end
 
+  def run(tokens) do
+    pids = Enum.map(tokens, fn token ->
+      {spawn(Echo, :listen, []), token}
+    end)
+    Enum.map(pids, fn {pid, token} ->
+      send pid, {self, token}
+    end)
+
+    Enum.map(pids, fn {pid, token} ->
+      receive do
+        {^pid, ^token} -> IO.puts token
+      end
+    end)
+  end
+end
+{% endhighlight %}
 
 And we run it:
 
@@ -207,62 +225,78 @@ And we run it:
 
 Ok, so this works, but let’s say we change `listen` to send a token twice?
 
-    def listen
-      receive do
-        {sender, token} ->
-          send(sender, {self, token})
-          send(sender, {self, token})
-        end
-      end
+{% highlight elixir %}
+def listen
+  receive do
+    {sender, token} ->
+      send(sender, {self, token})
+      send(sender, {self, token})
     end
+  end
+end
+{% endhighlight %}
+
 
 
 Sure, we can just double the block in our last `Enum.map` call.
 
-    Enum.map(pids, fn {pid, token} ->
-      receive do
-        {^pid, ^token} -> IO.puts token
-      end
-      receive do
-        {^pid, ^token} -> IO.puts token
-      end
-    end)
+{% highlight elixir %}
+Enum.map(pids, fn {pid, token} ->
+  receive do
+    {^pid, ^token} -> IO.puts token
+  end
+  receive do
+    {^pid, ^token} -> IO.puts token
+  end
+end)
+{% endhighlight %}
+
 
 But even though it works, and is more or less acceptable because we’re dealing with a finite (and self-determined) number of calls, hopefully you can see that we are heading down a dangerous road here. Say we change `listen` to do this:
 
-    def listen
-      receive do
-        {sender, token} ->
-          x = :random.uniform(100)
-          for _ <- 1..x, do: send(sender, {self, token})
-        end
-      end
+{% highlight elixir %}
+def listen
+  receive do
+    {sender, token} ->
+      x = :random.uniform(100)
+      for _ <- 1..x, do: send(sender, {self, token})
     end
+  end
+end
+{% endhighlight %}
+
 
 Now, for every PID we create, we need to listen for between 1 and 100 responses. The problem we’re facing is that every time a `receive` block matches, it’s done. It won’t be listening for the next matching message. But what if we could tell the `receive` block to keep listening after a match? Or, even better, what if we could tell the `receive` block to tell itself to keep listening after a match? Yes, that’s right, it’s time to pull out that old magic bullet and try not to shoot ourselves with it: recursion. And so:
 
-    defmodule Echo do
-      def listen do
-        receive do
-          {sender, token} -> send sender, {self, token}
-        end
-      end
-
-      def run(tokens) do
-        pids = Enum.map(tokens, fn token -> {spawn(Echo, :listen, []), token} end)
-        Enum.map(pids, fn {pid, token} -> send pid, {self, token} end)
-
-        start_receiving
-      end
-
-      def start_receiving do
-        receive do
-          {_pid, token} ->
-            IO.puts token
-            start_receiving
-        end
-      end
+{% highlight elixir %}
+defmodule Echo do
+  def listen do
+    receive do
+      {sender, token} -> send sender, {self, token}
     end
+  end
+
+  def run(tokens) do
+    pids = Enum.map(tokens, fn token ->
+      {spawn(Echo, :listen, []), token}
+    end)
+    Enum.map(pids, fn {pid, token} ->
+      send pid, {self, token}
+    end)
+
+    start_receiving
+  end
+
+  def start_receiving do
+    receive do
+      {_pid, token} ->
+        IO.puts token
+        start_receiving
+    end
+  end
+end
+{% endhighlight %}
+
 
 But wait, you might ask, won’t continuing to call `start_receiving` from inside itself blow up memory usage? (You may also be asking another question in addition to that one, but I'll get to that in a moment)
 
@@ -288,15 +322,17 @@ And to you I say: No. Just. No.
 
 Because I love you, and I want you to be happy in your coding. And Elixir feels the same way, and so has given us the `after` clause, which is what might be more familiarly called a timeout. It works like this:
 
-    def start_receiving do
-        receive do
-            {_pid, token} ->
-                IO.puts token
-                start_receiving
-        after
-            1000 -> nil
-        end
+{% highlight elixir %}
+def start_receiving do
+    receive do
+        {_pid, token} ->
+            IO.puts token
+            start_receiving
+    after
+        1000 -> nil
     end
+end
+{% endhighlight %}
 
 Here, if `start_receiving` doesn’t receive a matching message within 1 second, it will do what we’ve told it to do. Which, in this case, is nothing. The loop will end, and we’ll jump back into the `run` function, where `start_receiving` was the last call, and so the function will end. If we wanted, we could replace 1000 with a larger or smaller number, depending on how much latency we might expect. We can also use `0`, which will cause the loop to end as soon as there is no message to process.
 
@@ -345,37 +381,42 @@ Making that change and running your code, you'll get something that looks, at th
     people
     :ok
 
-
 Ok, great, so we can listen for an arbitrary number of responses, and stop listening once we stop receiving messages. There’s one more thing to look at. You may have noticed, in the previous output example, that the responses weren’t necessarily coming back in order. There were some “wizard” mixed in with the “people,” and some “reader” mixed in with the “dear”. Now, depending on the system you’re building, maybe that’s fine. Maybe it’s not important in what order the messages are received, just that they *are* received. But just for the sake of education, let’s say you did want this.
 
 Let’s think back to our earlier example, where we were using the `^`-binding in the `receive` blocks to ensure a specific matching sending process. We got rid of this in `start_receiving` because we didn’t care about order, we just needed to match against a two-element tuple. So we need to get some of that logic back, but it would be a shame to give up this lovely recursion we’ve got going.
 
 There may well be a better way to do this, but the best I’ve found is this particular combination of the two approaches. I’ll show you the code, then talk us through what’s going on:
 
-    defmodule Echo do
-      def listen do
-        receive do
-          {sender, token} -> send sender, {self, token}
-        end
-      end
-
-      def run(tokens) do
-        pids = Enum.map(tokens, fn token -> {spawn(Echo, :listen, []), token} end)
-        Enum.map(pids, fn {pid, token} -> send pid, {self, token} end)
-
-        Enum.map(pids, fn {pid, token} ->
-          start_receiving(pid, token)
-        end)
-      end
-
-      def start_receiving(pid, token) do
-        receive do
-          {^pid, ^token} ->
-            IO.puts token
-            start_receiving(pid, token)
-        end
-      end
+{% highlight elixir %}
+defmodule Echo do
+  def listen do
+    receive do
+      {sender, token} -> send sender, {self, token}
     end
+  end
+
+  def run(tokens) do
+    pids = Enum.map(tokens, fn token ->
+      {spawn(Echo, :listen, []), token}
+    end)
+    Enum.map(pids, fn {pid, token} ->
+      send pid, {self, token}
+    end)
+
+    Enum.map(pids, fn {pid, token} ->
+      start_receiving(pid, token)
+    end)
+  end
+
+  def start_receiving(pid, token) do
+    receive do
+      {^pid, ^token} ->
+        IO.puts token
+        start_receiving(pid, token)
+    end
+  end
+end
+{% endhighlight %}
 
 This loops through the pids we created and starts a recursive receiver listening for messages sent from that specific process. Because they are created in order, they will listen in order, and we see that the blocks of identical token *do* now appear grouped
 
@@ -435,7 +476,6 @@ This loops through the pids we created and starts a recursive receiver listening
     reader
     reader
     :done
-
 
 ### :done
 
