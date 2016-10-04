@@ -122,11 +122,11 @@ Now, this is all well and good, but it’s all happening inside the same IEx ses
 
 Fire up to IEx sessions based in the same directory. In order for them to be able to communicate, we’ll need to give them names, so the command will look something like
 
-    ~ iex —sname room1
+    ~ iex --sname room1
 
 and, in a different window
 
-    ~ iex —sname room2
+    ~ iex --sname room2
 
 or whatever more exciting names you come up with for the rooms. In your IEx now, your prompt should look something like
 
@@ -146,7 +146,7 @@ By creating a 2-element tuple with the name of the process and the name of the i
 
 Now, let’s go crazy and start up a 3rd IEx console
 
-    ~ iex —sname room3
+    ~ iex --sname room3
 
     iex(room3)> server = {:chatroom, :”room1@your-computers-local-name”}
     iex(room3)> c2 = Client.join_room(server, “Mikey”)
