@@ -1,7 +1,8 @@
 ---
 layout: post
-title:  Alphabet, Part 2
-categories: elixir music processing
+title:  Alphabet Project, Part 2
+date:   2017-07-22 15:11:00 -0400
+categories: elixir music
 ---
 
 Welcome back! Thanks for coming back! I know I promised we'd start off with turning
@@ -31,7 +32,7 @@ and ending up with a JSON array that looked, in part, like this:
 I said that we had to do this 25 more times, which is true, but after about 3 times, I noticed a few things.
 
 First, it's really kind of annoying to open the Processing file, change the letter `"a"` to `"b"` every time, rerun it,
-realize I missed one, and then have to go back and redo `"a"` because I overwrite some of the data.
+realize I missed one, and then have to go back and redo `"a"` because I overwrote some of the data.
 
 Second, because of the not-particularly-scientific way I created the individual letter chart images, they're not all
 the same height, meaning I need to find the dimensions of the image before I start.
@@ -57,7 +58,7 @@ number of arguments.
 
 Ideally, we'd want to run something like
 
-`processing-java --sketch=/path/to/our/graph/detector --run <the letter> <width> <height>`
+`processing-java --sketch=/path/to/our/graph/detector --run <letter> <width> <height>`
 
 In Elixir, we can sequence our calls to `identify` and `processing-java` to do just that:
 
@@ -113,7 +114,7 @@ void setup() {
 }
 {% endhighlight %}
 
-Next we add an Elixir funnction to iterate through the alphabet
+Next we add an Elixir function to iterate through the alphabet
 
 {% highlight elixir %}
 defmodule CoordinateDetector do
@@ -142,7 +143,7 @@ Processing z...Done
 
 That time is in microseconds, so we're looking at 71 seconds. Not bad, but since
 we're using Elixir, we might as well use one of its great features: spawning
-processes to do work in a different thread.
+processes to do work in different, independent threads.
 
 A few changes to the Elixir code later
 
@@ -217,7 +218,7 @@ Done processing o
 33 seconds! Much better. As you can see, we're not concerned about the order the
 processes complete in, since they're entirely independent of each other.
 
-And now, 33 seconds later, we've got 26 JSON files, each with a set of
+And so, 33 seconds later, we've got 26 JSON files, each with a set of
 coordinates. Now we can move on to the music!
 
 <hr />

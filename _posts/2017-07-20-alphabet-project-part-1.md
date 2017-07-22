@@ -247,5 +247,8 @@ we can subtract from it that Y value to get a value we can graph on a standard C
 
 Now we just do that 25 more times, and we'll be back next time to start turning this into music!
 
+<hr />
+<br />
+
 Thanks for reading! If you liked this post, and want to know when the next one
 is coming out, follow me on Twitter (link below)!
