@@ -5,6 +5,10 @@ date:   2017-07-22 15:11:00 -0400
 categories: elixir music
 ---
 
+Previous entries in this series:
+
+1. [Alphabet Project, Part 1]({{ site.baseurl }}{% post_url 2017-07-20-alphabet-project-part-1 %})
+
 Welcome back! Thanks for coming back! I know I promised we'd start off with turning
 some numbers into music, but I wanted to take a quick detour back into generating those
 numbers.
