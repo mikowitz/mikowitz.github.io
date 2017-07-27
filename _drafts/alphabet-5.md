@@ -18,7 +18,7 @@ from our first draft:
 
 1. dynamic
 1. pitch
-1. vowel sound
+1. phoneme sound/quality
 
 #### Dynamics
 
@@ -265,8 +265,183 @@ defmodule PitchGenerator.V2 do
 end
 {% endhighlight %}
 
+Running `PitchGenerator.V2.calculate_conversion_steps()` returns a list of pitch conversion tuples:
 
-Once we have our list of pitch shifts, we can build up a pitch-per-measure
-list for each part. To determine
+{% highlight elixir %}
+[{"c", "g"}, {"c", "g"}, {"c", "g"}, {"c", "g"}, {"c", "g"},
+{"c", "g"}, {"c", "g"}, {"c", "g"}, {"c", "g"}, {"c", "g"},
+{"c", "g"}, {"c", "g"}, {"c", "eqf"}, {"c", "eqf"}, ...]
+{% endhighlight %}
 
-#### Vowels
+Once we have our list of pitch shifts, we can build up a pitch-per-measure list for each part. To determine the
+order of parts that shift pitches, I'm going based on letter frequency order (etaoin...jxqz)
+
+To seed the measures, we create a list of tuples in the form `{letter, [ordered pitches for measures]}` and iterate through it.
+
+In pseudocode
+
+{% highlight pseudocode %}
+Each part starts with 3 measures of c, since we have 60 conversions
+but 202 measures, and we want the switches spaced out evenly by measure length
+part_measures = [
+  {"e", ["c", "c", "c"]}, {"t", ["c", "c", "c"]}, ..., {"q", ["c", "c", "c"]}
+]
+conversion_steps = [{"c", "g"}, {"c", "g"}, ...]
+for each tuple in conversion_steps:
+  for each set of part measures, in order:
+    if the last pitch in the measure list is the `from` pitch of the conversion:
+      append the `to` pitch to the measure list 3 times
+      (3 times because we have 60 conversions, but 202 measures,
+       so we want them to be spaced out evenly)
+    otherwise:
+      get the last pitch in the measure list and append it 3 times
+
+for each set of part measures:
+  make sure the length of the measures list is 202 by duplicating the final
+  item in the pitch list as many times as necessary
+{% endhighlight %}
+
+In actual code:
+
+{% highlight elixir %}
+defmodule PitchGenerator.V2 do
+  ...
+  def letters_by_frequency(pulse) do
+    least_frequent = case pulse do
+      "z" -> "q"
+      _ -> "z"
+    end
+    frequencies() |> Enum.to_list
+    |> Enum.sort_by(fn {_, f} -> f end, &>=/2)
+    |> Enum.map(fn {l, _} -> l end)
+    |> List.delete(pulse) |> List.delete(least_frequent)
+  end
+
+  def starting_pitches(pulse) do
+    letters_by_frequency(pulse) |> Enum.map(fn l ->
+      {l, ["c", "c", "c"]}
+    end)
+  end
+
+  def generate_measure_pitches(pulse) do
+    starting_pitches(pulse)
+    |> generate_splits(calculate_conversion_steps())
+  end
+
+  def generate_splits(pitches, []) do
+    # if the step list is empty, make sure each part has 202 measures
+    Enum.map(pitches, fn {letter, notes} ->
+      new_notes = notes ++ (
+        Stream.cycle([List.last(notes)])
+        |> Enum.take(202 - length(notes))
+      )
+      {letter, new_notes}
+    end)
+  end
+  def generate_splits(pitches, [{from, to}|rest_shifts]) do
+    # find the first part still playing the pitch we need to shift
+    {letter_to_shift, _} = Enum.find(pitches, fn {_, notes} ->
+      List.last(notes) == from
+    end)
+    # iterate through
+    next_pitches = Enum.map(pitches, fn {letter, notes} ->
+      case letter == letter_to_shift do
+        # if it's the part to switch, add 3 measures of the next pitch
+        # 3 measures so space out the conversions evenly (by measure count)
+        true -> {letter, notes ++ [to, to, to]}
+        # otherwise, just repeat the current pitch 3 times
+        false ->
+          next_pitch = List.last(notes)
+          {letter, notes ++ [next_pitch, next_pitch, next_pitch]}
+      end
+    end)
+    generate_splits(next_pitches, rest_shifts)
+  end
+  ...
+end
+{% endhighlight %}
+
+One last piece, and that is the least frequent row, which is iterating through the pitch
+row we have. In pseudocode, this is a simple exercise:
+
+{% highlight pseudocode %}
+index = 0
+for each event in the part:
+  if it's a rest, leave it
+  if it's a note, replace the pitch with pitch_row[index]
+  index++
+{% endhighlight %}
+
+In real code, in part because of the way notes and measures are represented in data,
+it is rather less simple:
+
+{% highlight elixir %}
+def least_frequent_part_to_lily(letter, pulse) do
+  part = letter |> @dynamics_generator.measures(pulse)
+  |> apply_row(0, [])
+  |> Enum.map(fn { {n, d}, notes} ->
+    "\\tuplet #{n}/#{d} { #{Enum.join(notes, " ")} }"
+  end) |> Enum.join("\n")
+  write_lilypond_file(letter, part)
+  {:ok, letter}
+end
+
+# if we've processed every measure, return the accumulator
+def apply_row([], _row_index, acc) do
+  acc
+end
+# otherwise, process the next measure
+def apply_row([measure|measures], row_index, acc) do
+  { {n, d}, notes} = measure
+  {new_notes, next_index} = apply_row_to_measure(notes, row_index, [])
+  apply_row(measures, next_index, acc ++ [{ {n, d}, new_notes}])
+end
+
+# if we've processed each event in the measure,
+# return the processed events and the updated row index
+def apply_row_to_measure([], index, acc), do: {acc, index}
+# if the analyzed event is a rest, leave it alone
+def apply_row_to_measure([n = << "r8", _ :: binary >>|ns], index, acc) do
+  apply_row_to_measure(ns, index, acc ++ [n])
+end
+# otherwise, replace the `c` with the next pitch in the row
+# and increment the row index
+def apply_row_to_measure([n|ns], index, acc) do
+  apply_row_to_measure(ns, index + 1,
+   acc ++ [Regex.replace(~r/c/, n, Enum.at(@pitches, rem(index, length(@pitches))))])
+end
+{% endhighlight %}
+
+With all these pieces, we can generate a new version of the score, including
+our rhythmic, dynamic, and pitch modifications. Let's see what we've got.
+
+Unsurprisingly, the first page looks the same, since the dynamic level is
+universally `pianississimo` and the pitches don't start changing until measure 4
+
+[![pitches/v1/page1]({{ site.url }}/assets/pitches/v1/page1.png)]({{ site.url }}/assets/pitches/v1/page1.png)
+
+About halfway through, we see that both the dynamic and pitch ranges have expanded.
+In measure 31 (last measure on the page), we can see the line for `V` (fifth from the bottom)
+change from `c` to `d`
+[![pitches/v1/page28]({{ site.url }}/assets/pitches/v1/page28.png)]({{ site.url }}/assets/pitches/v1/page28.png)
+
+And here at the end, we see the full pitch spread, as well as the `Z` part iterating through the full pitch set.
+
+[![pitches/v1/page46]({{ site.url }}/assets/pitches/v1/page46.png)]({{ site.url }}/assets/pitches/v1/page46.png)
+
+This is coming together pretty nicely! There's one more piece, and that's deciding on how the voices are going
+to articulate their phonemes. For example:
+
+* for consonants, only the stopped phoneme, or should I add a vowel sound
+* if I add vowels, are they the same throughout, or do they change? and, if so, how?
+* do the voices hold their notes, or are they all performed as short pulses
+
+I'll be honest: I'm not really sure of the answers to these questions yet, but if you come
+back for the next post, I'll do my best!
+
+<hr />
+<br />
+
+Thanks for reading! If you liked this post, and want to know when the next one
+is coming out, follow me on Twitter (link below)!
+
