@@ -9,6 +9,7 @@ Previous entries in this series:
 1. [Alphabet Project, Part 1]({{ site.baseurl }}{% post_url 2017-07-20-alphabet-project-part-1 %})
 1. [Alphabet Project, Part 2]({{ site.baseurl }}{% post_url 2017-07-22-alphabet-project-part-2 %})
 1. [Alphabet Project, Part 3]({{ site.baseurl }}{% post_url 2017-07-23-alphabet-project-part-3 %})
+1. [Alphabet Project, Part 4]({{ site.baseurl }}{% post_url 2017-07-27-alphabet-project-part-4 %})
 
 ### Step 4 - adding (more) musicality
 
@@ -31,46 +32,10 @@ This is easy enough, in theory, to generate an algorithm for. For each measure, 
 take a look at the fraction of `sounding note events / total events` map that inversely
 to a list of possible dynamics (i.e. smaller fraction = louder sound)
 
-### A brief aside
-
-Before we go too far down this path, I think the time has come to do something to make it
-easier to manage dealing with measures. At first they were just strings, but then we needed
-to replace some notes with rests, so we broke them down into the form
+To calculate the density of a measure:
 
 {% highlight elixir %}
-{ {tuplet_numerator, tuplet_denominator}, correct_length_list_of_eight_notes}
-{% endhighlight %}
-
-But working with that form requires knowing what each part means. Let's go one step further
-and turn the measure into a struct:
-
-{% highlight elixir %}
-defmodule Measure do
-  defstruct [:tuplet, events]
-end
-{% endhighlight %}
-
-Now instead of
-
-{% highlight elixir %}
-{ {17, 32}, ["c8", "r8", "c8", "c8", "c8", "r8", "c8", ..., "c8"]}
-{% endhighlight %}
-
-we can have
-
-{% highlight elixir %}
-%Measure{
-  tuplet: {17, 32},
-  events: ["c8", "r8", "c8", "c8", "c8", "r8", "c8", ..., "c8"]
-}
-{% endhighlight %}
-
-which provides at a quick glance much more context about what we're doing.
-
-With that struct in hand, we can calculate the note density for any given measure
-
-{% highlight elixir %}
-def density(%Measure{tuplet: {n, d}, events: events}) do
+def density({ {n, d}, events}) do
   # `Enum.count/2` chains `Enum.filter/2` and `length`
   # Here we get the count of sounding note events
   Enum.count(events, fn event ->
@@ -444,4 +409,3 @@ back for the next post, I'll do my best!
 
 Thanks for reading! If you liked this post, and want to know when the next one
 is coming out, follow me on Twitter (link below)!
-
