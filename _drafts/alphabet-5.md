@@ -170,7 +170,7 @@ atqf a cqs cs etqf e f fs af bf b bqs
 Taking choice 2 from above, with the `z` line performing that tone row's prime form,
 we're left with the 24 other rows to gradually spread to encomass the row.
 
-Here's the psuedocode for how I want to fill out that expansion
+Here's the description of the algorithm for how I want to fill out that expansion
 
 {% highlight pseudocode %}
 every part begins on `c`, the first pitch in the row
@@ -243,7 +243,7 @@ order of parts that shift pitches, I'm going based on letter frequency order (et
 
 To seed the measures, we create a list of tuples in the form `{letter, [ordered pitches for measures]}` and iterate through it.
 
-In pseudocode
+Explanation:
 
 {% highlight pseudocode %}
 Each part starts with 3 measures of c, since we have 60 conversions
@@ -266,7 +266,7 @@ for each set of part measures:
   item in the pitch list as many times as necessary
 {% endhighlight %}
 
-In actual code:
+Actual code:
 
 {% highlight elixir %}
 defmodule PitchGenerator.V2 do
@@ -327,7 +327,7 @@ end
 {% endhighlight %}
 
 One last piece, and that is the least frequent row, which is iterating through the pitch
-row we have. In pseudocode, this is a simple exercise:
+row we have. In English, this is a simple exercise:
 
 {% highlight pseudocode %}
 index = 0
