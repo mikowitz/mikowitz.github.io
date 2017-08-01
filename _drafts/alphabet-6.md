@@ -19,7 +19,7 @@ component: phoneme sound/quality.
 For the vowel lines, the natural sound of the letters provides a sustained sound
 rather than the more percussive consonants. To start providing some variation,
 the vowel parts (not including `Y`) will modulate back and forth between
-the long and short versions of the vowels. These are
+the long and short (American English) versions of the vowels. These are
 
 | vowel | short | long |
 |:-----:|:-----:|:----:|
