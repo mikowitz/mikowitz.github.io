@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  Alphabet Project, Part 5
+date: 2017-08-01 07:32:00 -0400
 categories: elixir music processing
 ---
 
