@@ -8,6 +8,7 @@ categories: elixir music processing
 1. [Alphabet Project, Part 2]({{ site.baseurl }}{% post_url 2017-07-22-alphabet-project-part-2 %})
 1. [Alphabet Project, Part 3]({{ site.baseurl }}{% post_url 2017-07-23-alphabet-project-part-3 %})
 1. [Alphabet Project, Part 4]({{ site.baseurl }}{% post_url 2017-07-27-alphabet-project-part-4 %})
+1. [Alphabet Project, Part 5]({{ site.baseurl }}{% post_url 2017-08-01-alphabet-project-part-5 %})
 
 ### Step 4 - adding (even more) musicality
 
@@ -183,6 +184,10 @@ Let's look at a few sample pages
 Great! This has come a long way from the first draft. With the musical elements, and
 the code that generates them, in place, it's time to move on to some refactoring, both
 of the code and the resulting LilyPond output. Stay tuned!
+
+The code I've written thus far, in almost exactly the same form it has appeared in in these posts, can be found
+[here on GitHub](https://github.com/mikowitz/alphabet_project/tree/v1). Future blog posts will include
+links to refactored code as appropriate.
 
 <hr />
 <br />
