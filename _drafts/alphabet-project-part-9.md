@@ -10,6 +10,7 @@ categories: elixir music processing
 1. [Alphabet Project, Part 4]({{ site.baseurl }}{% post_url 2017-07-27-alphabet-project-part-4 %})
 1. [Alphabet Project, Part 5]({{ site.baseurl }}{% post_url 2017-08-01-alphabet-project-part-5 %})
 1. [Alphabet Project, Part 6]({{ site.baseurl }}{% post_url 2017-08-06-alphabet-project-part-6 %})
+1. [Alphabet Project, Part 7]({{ site.baseurl }}{% post_url 2017-08-10-alphabet-project-part-7 %})
 
 ### Refactoring LilyPond output - Part Deux
 
