@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  Alphabet Project, Part 9
+date:   2017-08-14 08:35:00 -0400
 categories: elixir music processing
 ---
 
@@ -11,6 +12,7 @@ categories: elixir music processing
 1. [Alphabet Project, Part 5]({{ site.baseurl }}{% post_url 2017-08-01-alphabet-project-part-5 %})
 1. [Alphabet Project, Part 6]({{ site.baseurl }}{% post_url 2017-08-06-alphabet-project-part-6 %})
 1. [Alphabet Project, Part 7]({{ site.baseurl }}{% post_url 2017-08-10-alphabet-project-part-7 %})
+1. [Alphabet Project, Part 8]({{ site.baseurl }}{% post_url 2017-08-14-alphabet-project-part-8 %})
 
 ### Refactoring LilyPond output - Part Deux
 
