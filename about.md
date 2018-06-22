@@ -4,13 +4,8 @@ title: About
 permalink: /about/
 ---
 
-Hi! I'm Michael Berkowitz. Welcome to my blog. I'm a poet, web developer, guitarist, and aspiring circus artist from Lynn, Massachusetts.
-
-My homepage can be found [here](http://songsaboutsnow.com)
-
-<!--This is Michael Berkowitz's blog. Michael Berkowitz is a poet, web developer, and circus artist currently living in Watertown, Massachusetts.-->
-
-<!--His main website can be found [here](http://songsaboutsnow.com)-->
+Michael Berkowitz is a poet, web devoloper at [EzCater](https://www.ezcater.com), musician, and [aspiring circus artist](http://www.eshcircusarts.com) based out of Lynn, Massachusetts. His open source work can be found on
+[Github](https://github.com/mikowitz), and his writings about it, and code and music in general, can be found right here on this blog.
 
 <!-- This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/) -->
 
