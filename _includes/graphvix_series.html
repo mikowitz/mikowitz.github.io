@@ -1,0 +1,21 @@
+<div style="margin-left:10px;padding-top:10px;padding-bottom:10px;margin-left:25%;">
+  <hr/>
+  <h4>This post is part of a series:</h4>
+
+{% assign graphvix_posts = site.posts | sort: 'partno', 'last' "%}
+
+<ul>
+{% for post in graphvix_posts %}
+  {% if post.url contains 'graphvix' %}
+    {% if post.partno < 100 %}
+    <li><a class="page-link" href="{{ post.url | prepend: site.baseurl }}">Part {{post.partno}} - {{post.subtitle}}</a></li>
+    {% else %}
+    <li><a class="page-link" href="{{ post.url | prepend: site.baseurl }}">Postscript - {{post.subtitle}}</a></li>
+    {% endif %}
+  {% endif %}
+{% endfor %}
+</ul>
+
+  <hr/>
+</div>
+
