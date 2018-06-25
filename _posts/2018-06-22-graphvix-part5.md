@@ -11,14 +11,7 @@ By the  end of the previous post, we had a basic Graphvix API for creating and d
 
 But the `:digraph` module was designed to handle more purely mathematical functions on graphs: detecting cycles, finding paths, etc. In order to implement the more advanced, display-centric features of Graphviz, we’re going to need to start building a struct that can store additional data.
 
-### Caveat
-
-Before we dive into the meat of this post, there’s one piece of unfortunate terminology trouble we need to get out of the way. The erlang `digraph` module, as we’ve seen, uses the term “vertex”, but the `.dot` syntax uses the word “node”. Both terms represent the same concept, and will always be interchangeable. However, it’s not ideal to have to switch back and forth often between the terms. For two reasons, I’m going to do my best to use “vertex” in all places that are **not** specifically referring to `.dot` syntax:
-
-1. The existing `digraph` code uses “vertex” and “v”, and so I would prefer to maintain terminology with existing code
-2. `node` is itself a concept in distributed Erlang and Elixir, so I’d like to keep my own code from overlapping
-
-### Back to it
+{% include graphvix_series.html %}
 
 Let’s take a look first at one of the simpler features: global default display settings. These allow you to apply formatting rules to *all* vertices or edges in a graph. These can then be overwritten on a per-vertex-or-edge basis, but if, say, you want every edge to be colored green, you can define that in one place and it will apply to the entire graph.
 

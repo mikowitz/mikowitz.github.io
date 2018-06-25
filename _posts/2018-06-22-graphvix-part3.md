@@ -9,6 +9,8 @@ categories: elixir graphviz
 
 As mentioned at the end of the last post, the order of entry for vertices in a `.dot` source file can affect the generated output. In this post we’re going to dig a bit deeper into how `:digraph` keeps track of its contents, and how we can use that system to ensure that the graph we end up with looks the way we expect it to.
 
+{% include graphvix_series.html %}
+
 Let’s start with a new digraph:
 
 ```elixir

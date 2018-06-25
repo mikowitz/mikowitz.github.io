@@ -54,7 +54,9 @@ With this understanding of records, we can enumerate the tasks we need `Graphvix
 3. generate correct  `DOT` output for nodes with `shape=record`
 4. generate edge definitions using record ports
 
-### Records in `Graphvix`
+{% include graphvix_series.html %}
+
+### Records in Graphvix
 
 Let’s begin with a basic struct
 

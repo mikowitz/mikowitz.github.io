@@ -9,6 +9,8 @@ categories: elixir graphviz
 
 My goal for this post is not to provide a deep dive into the implementation of Erlang’s `digraph` module. Other blog posts do this, and do this well, so here I want to focus on the basics, and what is relevant for reimplementing `Graphvix`.
 
+{% include graphvix_series.html %}
+
 So let’s start with a brand new `digraph`
 
 ```elixir

@@ -20,7 +20,9 @@ In the previous post, I wrote out a list of tasks necessary to incorporate recor
 
 It looks like we finished tasks 1 and 2 already, so our next step is to take one of the `RecordNode` structs we created and write code to correctly translate it into a `DOT` string representation.
 
-### `RecordNode` into `DOT`
+{% include graphvix_series.html %}
+
+### RecordNode into DOT
 
 Let’s review the function signature of `Graph.add_vertex/3`:
 

@@ -9,6 +9,8 @@ categories: elixir graphviz
 
 The final piece of the `Graphvix` spec to look at is the ability to rank nodes and subgraphs in order to enforce vertical or horizontal hierarchies in a graph. The functionality to make this happen is actually already in `Graphvix`, but since it can be such an important piece of structuring a graph, I wanted to call a bit of extra attention to it.
 
+{% include graphvix_series.html %}
+
 As an example, let’s draw a very simple family tree, with years of birth, of my immediate family. To do this, we need to make sure a timeline of years is ordered correctly along the left side, and that each family member is aligned with their birth year. Let’s begin by creating the vertices:
 
 ```elixir
@@ -98,7 +100,7 @@ If I wanted my name to be at a **lower** rank than any others, I would use `sour
 
 ### `rankdir`
 
-As I said above, the default direction for graph ranking is top-to-bottom. This can be set explicitly by adding a global property of `rankdir=TB` to the graph [1]:
+As I said above, the default direction for graph ranking is top-to-bottom. This can be set explicitly by adding a global property of `rankdir=TB` to the graph[^1]
 
 ```elixir
 Graph.set_graph_property(g, :rankdir, "TB")
@@ -117,4 +119,4 @@ And with that, we’ve reached the end of my series on `Graphvix`. We started wi
 
 This is far from a complete survey of the `DOT` language syntax. There are properties for graphs, subgraphs, nodes and edges that I have not touched on in this series. However, they can be added, just as the properties we _have_ looked at, using the API we have written. A more complete overview of the `DOT` language, which I used as a resource while writing `Graphvix` and this blog series, can be found as a PDF [here](https://www.graphviz.org/pdf/dotguide.pdf).
 
-[1] This function, and the associated functions to display these properties, need to be created at this point, an oversight on my part earlier in the implementation. However, as they have much in common with other functions which already exist, there is little need to describe them in any detail. The `Graphvix` code containing these additions can be found tagged [here](https://github.com/mikowitz/graphvix/tree/v1.0.0.pre.graphproperties).
+[^1]: This function, and the associated functions to display these properties, need to be created at this point, an oversight on my part earlier in the implementation. However, as they have much in common with other functions which already exist, there is little need to describe them in any detail. The `Graphvix` code containing these additions can be found tagged [here](https://github.com/mikowitz/graphvix/tree/v1.0.0.pre.graphproperties).

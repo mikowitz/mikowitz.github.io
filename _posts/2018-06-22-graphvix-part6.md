@@ -64,6 +64,8 @@ end
 
 Then, when we create a new subgraph or cluster, we can pull the current value from that row, and increment the next value in the table, the same as we do when creating a new vertex.
 
+{% include graphvix_series.html %}
+
 ### Creating a new subgraph
 
 Creating a new subgraph is fairly straightforward. The function needs to take a fair number of arguments, but all fairly simple:
@@ -76,7 +78,7 @@ Creating a new subgraph is fairly straightforward. The function needs to take a 
 
 It would then return a tuple of two elements, the graph (which has had the subgraph added to its list of subgraphs), and the id of the new subgraph.
 
-### `DOT` formatting subgraphs
+### DOT format for subgraphs
 
 This is where things get interesting. Up until this point, our `Graph.to_dot` function has printed all vertices and edges at the top level of the graph. Now that we have introduced subgraphs, this needs to change.
 

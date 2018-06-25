@@ -7,10 +7,18 @@
 <ul>
 {% for post in graphvix_posts %}
   {% if post.url contains 'graphvix' %}
-    {% if post.partno < 100 %}
-    <li><a class="page-link" href="{{ post.url | prepend: site.baseurl }}">Part {{post.partno}} - {{post.subtitle}}</a></li>
+    {% if post.url == page.url %}
+      {% if post.partno < 100 %}
+      <li>Part {{post.partno}} - {{post.subtitle}}</li>
+      {% else %}
+      <li>Postscript - {{post.subtitle}}</li>
+      {% endif %}
     {% else %}
-    <li><a class="page-link" href="{{ post.url | prepend: site.baseurl }}">Postscript - {{post.subtitle}}</a></li>
+      {% if post.partno < 100 %}
+      <li><a class="page-link" href="{{ post.url | prepend: site.baseurl }}">Part {{post.partno}} - {{post.subtitle}}</a></li>
+      {% else %}
+      <li><a class="page-link" href="{{ post.url | prepend: site.baseurl }}">Postscript - {{post.subtitle}}</a></li>
+      {% endif %}
     {% endif %}
   {% endif %}
 {% endfor %}

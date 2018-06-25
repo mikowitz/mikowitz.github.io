@@ -55,6 +55,8 @@ which produces the resulting output.
 
 You can go even further here. It is possible to nest tables inside one another, to change font, to explicitly set text alignment, to have background colors form a gradient, and more. However, let us begin by writing an API that will let us generate the first, simple table shown above. Once we have done that, much like more generic nodes and edges in earlier posts in this series, we will see that creating more complex examples requires little more than passing additional parameters to set as attributes, not a large expansion of the API.
 
+{% include graphvix_series.html %}
+
 ## Graphvix API
 
 Since this is a different type of record than the row and column based ones we’ve looked at before, it makes sense to begin by writing a new module to contain the logic we need:

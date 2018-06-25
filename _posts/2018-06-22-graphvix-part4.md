@@ -63,8 +63,7 @@ As we continue to expand the functionality of this library, we will eventually n
 
 And, if we run this code, we end up with a nice, little “test_graph.png” that looks like this:
 
-[image:99C58299-36D2-406C-9DA3-B499992D26A8-449-0000A8F498C8D098/23A4B0C6-637F-468E-99E6-C50F9DB7CC43.png]
-
+[![test_graph.png]({{ "assets/graphvix/part-4/test_graph.png" | absolute_url }})]({{"assets/graphvix/part-4/test_graph.png" | absolute_url}})
 
 Except for the `add_vertex` code we looked at in the previous post [add link here], there’s very little in the code implementing this API that is particularly noteworthy. One piece I do want to explore briefly is a bit of fancy footwork to reduce duplication between the code that generates `DOT` formatted vertices and edges:
 
@@ -83,6 +82,8 @@ defp edges_to_dot(graph) do
   end)
 end
 ```
+
+{% include graphvix_series.html %}
 
 ### Caveat
 
