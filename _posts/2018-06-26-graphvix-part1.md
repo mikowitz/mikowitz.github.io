@@ -3,7 +3,7 @@ layout: post
 title:  On Graphvix - Part 1
 subtitle: The over engineering-ing
 partno: 1
-date:   2018-06-22 19:35:00 -0400
+date:   2018-06-26 12:40:00 -0400
 categories: elixir graphviz
 ---
 

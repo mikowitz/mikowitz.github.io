@@ -3,7 +3,7 @@ layout: post
 title:  On Graphvix - Part 2
 subtitle: A :digraph primer
 partno: 2
-date:   2018-06-22 19:35:00 -0400
+date:   2018-06-26 19:41:00 -0400
 categories: elixir graphviz
 ---
 
