@@ -74,7 +74,7 @@ And, finally, we add edges to show relationships. Blue represents a partner in a
 
 Let’s take a look at the resulting graph:
 
-[image:736F2953-1C9B-4609-9A5D-075A12AD87E2-75196-0003F99C36F9BE76/tree.png]
+[![tree.png]({{ "assets/graphvix/part-9/tree.png" | absolute_url }})]({{"assets/graphvix/part-9/tree.png" | absolute_url}})
 
 Not the prettiest graph in the world, but it does what we set out to have it do. For the most part, that’s all there really is to ranks in `DOT`. But, in addition to the rank of `same`, we can pass in `min`, `max`, `source` or `sink`. Using our example above, we can see what effect these ranks have.
 
@@ -90,15 +90,15 @@ For example, if I wanted my own name to be at least as high on the graph as anyt
 
 And the resulting graph looks like
 
-[image:3B5089B0-B177-44A3-A94A-167901A21C47-75196-0003FAE0A50229A0/tree2.png]
+[![tree_min.png]({{ "assets/graphvix/part-9/tree_min.png" | absolute_url }})]({{"assets/graphvix/part-9/tree_min.png" | absolute_url}})
 
 If I wanted my name to be at a **lower** rank than any others, I would use `source` instead of `min`, resulting in the graph below:
 
-[image:515D7FDC-9D60-426E-9DB2-97B0FA545F26-75196-0003FB02A347AF91/tree3.png]
+[![tree_source.png]({{ "assets/graphvix/part-9/tree_source.png" | absolute_url }})]({{"assets/graphvix/part-9/tree_source.png" | absolute_url}})
 
 `max` and `sink`, work analogously to `min` and `source` respectively, but in the opposite direction, ensuring a rank higher than (or equal to, in the case of `max`) any other vertex in the graph.
 
-### `rankdir`
+### rankdir
 
 As I said above, the default direction for graph ranking is top-to-bottom. This can be set explicitly by adding a global property of `rankdir=TB` to the graph[^1]
 
@@ -108,11 +108,11 @@ Graph.set_graph_property(g, :rankdir, "TB")
 
 This results in a graph that looks identical to our first graph. As you could probably guess, there are four values for `rankdir`: `TB`, `BT`, `LR` and `RL`. These behave as you might expect. For example, here is what our family tree looks like with `rankdir=LR`
 
-[image:9348A33F-85F7-45E2-BEF9-45D04F0718B4-75196-0003FBBB22A61EAB/tree4.png]
+[![tree_LR.png]({{ "assets/graphvix/part-9/tree_LR.png" | absolute_url }})]({{"assets/graphvix/part-9/tree_LR.png" | absolute_url}})
 
 And, if we were to set `rank=source` for my name and birth year, we see, again that the subgraph is shifted to the lowest possible rank, relative to the new `rankdir`:
 
-[image:B4F97630-F99E-4A78-9CE2-88C8EF73E5D6-75196-0003FBCB5050FBDA/tree5.png]
+[![tree_LR_source.png]({{ "assets/graphvix/part-9/tree_LR_source.png" | absolute_url }})]({{"assets/graphvix/part-9/tree_LR_source.png" | absolute_url}})
 
 And with that, we’ve reached the end of my series on `Graphvix`. We started with an overly complex library using `GenServers` to hew too close to a traditional object oriented approach to the problem, and have ended with a library that not only has more functionality than our original, but also works much more in the style and spirit of Elixir. Thank you for joining me on this journey.
 

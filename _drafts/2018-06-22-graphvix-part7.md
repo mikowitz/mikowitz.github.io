@@ -10,7 +10,8 @@ categories: elixir graphviz
 
 `DOT` provides a node type “record”, which allows data to be displayed in arbitrarily nested rows and columns. It may be easier to visualize than to conceptualize:
 
-[image:41608571-A445-43BA-808E-A8B670F50C94-79215-0003D187B5AC03FD/test.png]
+[![records.png]({{ "assets/graphvix/part-7/records.png" | absolute_url }})]({{"assets/graphvix/part-7/records.png" | absolute_url}})
+
 
 These examples show, on the left, an example of a record with rows as its starting orientation, and on the right, a record beginning with columns.
 
@@ -30,7 +31,7 @@ Before we dive in to how to model these nodes in `Graphvix`, there is one other 
 
 Ports identify individual cells in a record, and allow edges to be drawn directly to them. Again, it may be easier to understand this by seeing it in action:
 
-[image:2A5DE419-93D4-4FA4-BC05-09868CE7FAEE-79215-0003D24FA41CF289/test2.png]
+[![with_ports.png]({{ "assets/graphvix/part-7/with_ports.png" | absolute_url }})]({{"assets/graphvix/part-7/with_ports.png" | absolute_url}})
 
 And the `DOT` code:
 

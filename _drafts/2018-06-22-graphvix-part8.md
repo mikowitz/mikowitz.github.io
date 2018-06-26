@@ -115,7 +115,7 @@ Graph.write(g, "test.png")
 
 The output of the final line of code gives us this image:
 
-[image:28719339-4F7C-4472-8EA0-D8C841008A90-79215-0003E08911B3E820/test3.png]
+[![nodes.png]({{ "assets/graphvix/part-8/nodes.png" | absolute_url }})]({{"assets/graphvix/part-8/nodes.png" | absolute_url}})
 
 ### Edges
 
@@ -216,7 +216,7 @@ digraph G {
 Graph.write(g, "test.png")
 ```
 
-[image:0884B2B2-4E5A-4542-B706-79DBCC806898-79215-0003E3707C280A7B/test4.png]
+[![edges.png]({{ "assets/graphvix/part-8/edges.png" | absolute_url }})]({{"assets/graphvix/part-8/edges.png" | absolute_url}})
 
 And voila! We can see the green edge pointing out from the “c” cell of our record.
 
