@@ -3,7 +3,7 @@ layout: post
 title:  On Graphvix - Part 4
 subtitle: A first API
 partno: 4
-date:   2018-06-22 19:35:00 -0400
+date:   2018-06-27 20:50:00 -0400
 categories: elixir graphviz
 ---
 
