@@ -3,7 +3,7 @@ layout: post
 title:  On Graphvix - Part 5
 subtitle: Global settings
 partno: 5
-date:   2018-06-22 19:35:00 -0400
+date:   2018-06-30 16:15:00 -0400
 categories: elixir graphviz
 ---
 
