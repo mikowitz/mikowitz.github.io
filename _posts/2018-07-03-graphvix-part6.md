@@ -3,7 +3,7 @@ layout: post
 title:  On Graphvix - Part 6
 subtitle: Subgraphs
 partno: 6
-date:   2018-06-22 19:35:00 -0400
+date:   2018-07-03 21:05:00 -0400
 categories: elixir graphviz
 ---
 
