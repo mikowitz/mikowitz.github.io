@@ -9,9 +9,9 @@ categories: elixir graphviz
 
 ### Subgraphs vs Clusters
 
-In DOT, a subgraph is any subset of the defined graph enclosed within `subgraph ID { … }`, or even just `{ … }`. This can be used to specify a common style for a set of nodes or edges (subgraphs can have their own global properties, like the graph as a whole, as we saw in the previous post), or to help group the graph for directional ranking (as we’ll see in a future post).
+In DOT, a subgraph is any subset of the defined graph enclosed within `subgraph ID { ... }`, or even just `{ ... }`. This can be used to specify a common style for a set of nodes or edges (subgraphs can have their own global properties, like the graph as a whole, as we saw in the previous post), or to help group the graph for directional ranking (as we’ll see in a future post).
 
-From the DOT documentation: “A cluster is a subgraph placed in its own distinct rectangle of the layout. A subgraph is recognized as a cluster when its name has the prefix `cluster`”, that is, any subset of the defined graph enclosed within `subgraph cluster<ID> { … }`.
+From the DOT documentation: “A cluster is a subgraph placed in its own distinct rectangle of the layout. A subgraph is recognized as a cluster when its name has the prefix `cluster`”, that is, any subset of the defined graph enclosed within `subgraph cluster<ID> { ... }`.
 
 In addition to the global properties for nodes and edges, a cluster can also define a set of layout options for itself, such as a label and border/fill colors.
 
