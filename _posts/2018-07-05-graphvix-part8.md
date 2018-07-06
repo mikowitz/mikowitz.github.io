@@ -3,66 +3,66 @@ layout: post
 title:  On Graphvix - Part 8
 subtitle: Records API
 partno: 8
-date:   2018-06-22 19:35:00 -0400
+date:   2018-07-06 15:20:00 +0200
 categories: elixir graphviz
 ---
 
-In the previous post, we looked at how records and ports work in `DOT` notation, and sketched out an API for incorporating them into `Graphvix`. In this post, we’ll dive deeper into the Elixir implementation.
+In the last post, we looked at how records and ports work in `DOT` notation, and sketched out an API for incorporating them into `Graphvix`. In this post, we’ll dive deeper into the Elixir implementation.
+
+{% include graphvix_series.html %}
 
 #### What we’ve covered
 
-In the previous post, I wrote out a list of tasks necessary to incorporate records into `Graphvix`. Let’s revisit that list now and see what we’ve accomplished already
+In the previous post, I wrote out a list of tasks necessary to incorporate records into `Graphvix`. Let’s revisit that list now and see what we’ve already handled
 
 1. create a `Record` struct, with an API to easily create rows and columns
 2. attach port names to cells in a `Record` struct
 3. generate correct  `DOT` output for nodes with `shape=record`
 4. generate edge definitions using record ports
 
-It looks like we finished tasks 1 and 2 already, so our next step is to take one of the `RecordNode` structs we created and write code to correctly translate it into a `DOT` string representation.
+It looks like we finished tasks 1 and 2 in Part 7, so our next step is to take one of the `Record` structs we created and write code to correctly translate it into a `DOT` string representation.
 
-{% include graphvix_series.html %}
-
-### RecordNode into DOT
+### Record into DOT
 
 Let’s review the function signature of `Graph.add_vertex/3`:
 
 `def add_vertex(graph, label, attributes \\ [])`
 
-and the function signature of `RecordNode.new/2` is
+and the function signature of `Record.new/2` is
 
 `def new(body, properties \\ [])`
 
-In order to convert a `RecordNode` into a form that can be passed to `add_vertex/3`, we need to do two things:
+In order to convert a `Record` into a form that can be passed to `add_vertex/3`, we need to do two things:
 
 1. Generate the full `label` from the `body` attribute of the record node
 2. append `[shape: “record]` to the record node’s attributes
 
-To make a clean API, let’s define `Graph.add_record(graph, record)`, where the `record` argument is a `RecordNode` struct. This function would be responsible for the two steps above, and passing those new values on to `Graph.add_vertex/3`:
+To make a clean API, let’s define `Graph.add_record(graph, record)`, where the `record` argument is a `Record` struct. This function would be responsible for the two steps above, and passing those new values on to `Graph.add_vertex/3`:
 
 ```elixir
-def add_record(graph, %RecordNode{body: body, attributes: attributes}) do
-  label = RecordNode.to_label(body)
+def add_record(graph, %Record{body: body, attributes: attributes}) do
+  label = Record.to_label(body)
   attributes = Keyword.put(attributes, :shape, "record")
   add_vertex(graph, label, attributes)
 end
 ```
 
-We’ve passed the responsibility of generating the label — the most involved part of this functionality — to the `RecordNode` module, but this is in keeping with the Elixir mindset of keeping each function as simple and self-contained as possible.
+We’ve passed the responsibility of generating the label — the most involved part of this functionality — to the `Record` module, but this is in keeping with the Elixir mindset of keeping each function as simple and self-contained as possible.
 
-Let’s turn our attention to `label_from/1` in `RecordNode`
+Let’s turn our attention to `label_from/1` in `Record`
 
 ```elixir
 def to_label(%{body: body}) when is_bitstring(body) do
   body
 end
-def to_label(%{body: subset = %RecordNodeSubset{}}) do
-  RecordNodeSubset.to_label(subset, true)
+def to_label(%{body: subset = %RecordSubset{}}) do
+  RecordSubset.to_label(subset, true)
 end
 ```
 
 The `true` we pass into the second definition of  `to_label` is to let our function know that this first subset, whether a row or column, represents is the outer-most orientation in the record. This is important because at the top level, a row has no wrapping around it, while a column at the top level, or any nested row or column, is surrounded by `{ … }`.
 
-Once again, we have deferred functionality down another level, to the `RecordNodeSubset` module. Again, we have two possibilities we need to handle. First, our subset is a row, and it is at the top level of the record. In that case, we need to generate a `DOT` string that is not surrounded by braces. Our second condition is any other case, in which case we want to ensure this subset is enclosed in the braces.
+Once again, we have deferred functionality down another level, to the `RecordSubset` module. Again, we have two possibilities we need to handle. First, our subset is a row, and it is at the top level of the record. In that case, we need to generate a `DOT` string that is not surrounded by braces. Our second condition is any other case, in which case we want to ensure this subset is enclosed in the braces.
 
 ```elixir
 def to_label(subset, top_level \\ false)
@@ -85,8 +85,8 @@ def _to_label(cell) when is_bitstring(cell), do: cell
 def _to_label({port_name, cell}) do
   "<#{port_name}> #{cell}"
 end
-def _to_label(subset = %RecordNodeSubset{}) do
-  RecordNodeSubset.to_label(subset)
+def _to_label(subset = %RecordSubset{}) do
+  RecordSubset.to_label(subset)
 end
 ```
 
@@ -99,7 +99,7 @@ Before moving on to drawing edges to and from records and ports, let’s test ou
 ```elixir
 g = Graph.new()
 {g, v1} = Graph.add_vertex(g, "normal node")
-r = RecordNode.new(["a", "b", RecordNode.column([{"c_port", "c"}, "d"])])
+r = Record.new(["a", "b", Record.column([{"c_port", "c"}, "d"])])
 {g, v2} = Graph.add_vertex(g, r)
 Graph.to_dot(g)
 """
@@ -197,7 +197,7 @@ Let’s revisit our example from above, and include a couple edges to show this 
 ```elixir
 g = Graph.new()
 {g, v1} = Graph.add_vertex(g, "normal node")
-r = RecordNode.new(["a", "b", RecordNode.column([{"c_port", "c"}, "d"])])
+r = Record.new(["a", "b", Record.column([{"c_port", "c"}, "d"])])
 {g, v2} = Graph.add_vertex(g, r)
 Graph.to_dot(g)
 {g, _e1} = Graph.add_edge(g, v1, v2)
