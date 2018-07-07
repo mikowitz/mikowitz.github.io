@@ -21,12 +21,13 @@ html_record [label=<<table>
     <td>c</td>
     <td>d</td>
   </tr>
-</table>>,style="plaintext"]
+</table>>,shape="plaintext"]
 ```
 
 And here’s what that looks like
 
-[image:D9CB6525-C87F-478B-9E05-549163E1C872-46251-000092B2CD67279D/9004C40A-2991-40EE-8EC6-A16945DDD191.png]
+[![basic.png]({{ "assets/graphvix/postscript/basic.png" | absolute_url }})]({{"assets/graphvix/postscript/basic.png" | absolute_url}})
+
 
 And something a little more complicated:
 
@@ -51,7 +52,7 @@ html_record [label=<<table border="0" cellborder="1" cellspacing="0">
 
 which produces the resulting output.
 
-[image:69AF3F14-1118-4E76-9AD6-E33B5D7513FA-46251-000093341B8BE01A/AAEDF023-4732-413D-8D03-2332A4A76F65.png]
+[![complex.png]({{ "assets/graphvix/postscript/complex.png" | absolute_url }})]({{"assets/graphvix/postscript/complex.png" | absolute_url}})
 
 You can go even further here. It is possible to nest tables inside one another, to change font, to explicitly set text alignment, to have background colors form a gradient, and more. However, let us begin by writing an API that will let us generate the first, simple table shown above. Once we have done that, much like more generic nodes and edges in earlier posts in this series, we will see that creating more complex examples requires little more than passing additional parameters to set as attributes, not a large expansion of the API.
 
@@ -116,11 +117,10 @@ defmodule Graphvix.HTMLRecord do
   # We'll add the `tag: "font"` element here to differentiate
   # from a `td` tag
   def font(label, attributes \\ []) do
-    %{label: label, attributes: attributes, tag: "font"}
+    %{label: label, attributes: attributes, tag: :font}
   end
-  def br do
-    %{tag: "br"}
-  end
+
+  def br, do: %{tag: :br}
 end
 ```
 
@@ -383,7 +383,7 @@ We take the `record`, generate the label, and pass that along to our existing `a
 
 There’s only one problem left. Our `vertices_to_dot/1` function passes the vertex’s label through `attributes_to_dot/1`, which unconditionally wraps every attribute value in a pair of double quotes. Currently, that includes our HTML label, which is already wrapped in `<...>`. If we generate a .dot file as is and compile, we end up with a node that looks something like this
 
-[image:394BB1D9-BDA6-40F4-B125-B0C916EF0689-46251-00009B5CA64E7F3A/2E174293-E461-4DD4-BB96-36112C65B89E.png]
+[![error.png]({{ "assets/graphvix/postscript/error.png" | absolute_url }})]({{"assets/graphvix/postscript/error.png" | absolute_url}})
 
 Which is decidedly not what we want. Fortunately, we can add a second pattern match to our `attribute_to_dot/2` function which looks for this case and does **not** include the double quotes:
 
@@ -399,7 +399,7 @@ end
 
 Recompiling, we get a node that looks much more like what we were hoping for:
 
-[image:3FBAD9CF-2FA2-4A03-BC69-4CE9449A1F3F-46251-00009B7981C21D19/181CB9C9-505F-40FB-8EAD-60A2380F724D.png]
+[![basic.png]({{ "assets/graphvix/postscript/basic.png" | absolute_url }})]({{"assets/graphvix/postscript/basic.png" | absolute_url}})
 
 ## Edges and ports
 
