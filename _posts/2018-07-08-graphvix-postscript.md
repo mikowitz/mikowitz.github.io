@@ -3,7 +3,7 @@ layout: post
 title:  On Graphvix - Postscript
 subtitle: HTML Records
 partno: 100
-date:   2018-06-22 19:35:00 -0400
+date:   2018-07-08 10:05:00 +0200
 categories: elixir graphviz
 ---
 
@@ -409,7 +409,9 @@ As we saw in an example above, giving a cell a port is as simple as passing it i
 
 Ok, that was a lot! Thanks for sticking through it with me.
 
-With this post, my series on `Graphvix` is truly coming to a close. I won’t say it’s the last time I’ll write about this library, as there is additional functionality that could be added, but for now, I have a solid, 1.0.0-able version of the library.
+With this post, my series on `Graphvix` is truly coming to a close. I won’t say it’s the last time I’ll write about this library, as there is additional functionality that could be added, but for now, I'm ready to release v1.0.0 of `Graphvix`.
+
+It can be found on [Github](https://github.com/mikowitz/graphvix/tree/1.0.0) and [Hex.pm](https://hex.pm/packages/graphvix). Documentation can be found online [here](https://hexdocs.pm/graphvix/api-reference.html).
 
 If you’ve enjoyed this post, or this series more generally, please share it with your friends who might be interested in Elixir or Graphviz. And follow me on Twitter to keep up to date with future blogging.
 
