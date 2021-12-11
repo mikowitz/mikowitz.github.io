@@ -2,7 +2,7 @@
 layout: post
 title:  "Generating Art in Elixir"
 subtitle: "(or) My Time in the Yak Mines"
-date:   2021-11-06 10:30:00 -0400
+date:   2021-12-11 10:30:00 -0400
 categories: elixir generative
 ---
 
@@ -115,8 +115,8 @@ So, yak shaved.
 
 Which, I think, is an excellent number of yaks for a single blog post. Next time, we'll begin the work of putting these pieces together.
 
-<hr/>
-<br/>
+<hr style="border:1px solid #888888;margin-bottom:15px;"/>
+#### Footnotes
 
 [^1]: which I'm not going to do in these posts to any great extent. There are far better resources for this than I can provide. [The Rust Programming Language](https://doc.rust-lang.org/book/title-page.html) by Steve Klabnik and Carol Nichols, for example, is a great starting point.
 
