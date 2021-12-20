@@ -2,15 +2,20 @@
 layout: post
 title:  "Actually Generating Art in Elixir"
 subtitle: "(or) the Episode of Oprah Where Everyone Got a Yak"
-date:   2021-12-12 10:30:00 -0400
-categories: elixir generative
+date:   2021-12-20 10:30:00 -0400
+categories: elixir rust generative xairo
+partno: 2
 ---
 
-To do my best to keep the yaks contained, I'm going to set out a simple, concrete goal for this post:
+As promised in my previous post, I'm going to do my best to keep the yaks
+contained. So I'm going to set out a simple, concrete goal for this post:
 
-**from an IEx session, create a new image, paint its background purple, and save it as test.png**
+**from an IEx session, create a new image, paint its background purple, and
+save it as test.png**
 
 So let's dive in!
+
+{% include xairo_series.html %}
 
 ### Create a new image in Elixir
 

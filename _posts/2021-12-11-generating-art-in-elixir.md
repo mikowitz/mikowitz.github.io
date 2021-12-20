@@ -3,12 +3,15 @@ layout: post
 title:  "Generating Art in Elixir"
 subtitle: "(or) My Time in the Yak Mines"
 date:   2021-12-11 10:30:00 -0400
-categories: elixir generative
+categories: elixir rust generative xairo
+partno: 1
 ---
 
 I have been interested in generative art for a long time. Over the years I have experimented primarily in [Processing](https://processing.org), variously its Java, Python, and p5.js modes, and, for a time, the now-deprecated ruby-processing library. As I've become more bullish on [Elixir](https://elixir-lang.org) for my personal projects, I've wanted a similar Elixir library to work with, but none has been forthcoming.
 
 Which, me being me, means I set out to write one.
+
+{% include xairo_series.html %}
 
 In the course of my searching, I came across the Haskell [cairo package](https://hackage.haskell.org/package/cairo), Haskell bindings for the [C cairo 2d grahpics library](https://www.cairographics.org), as well as an excellent introduction to it on [Ben Kovach's blog](https://www.kovach.me/Generating_artwork_with_Haskell.html).
 
