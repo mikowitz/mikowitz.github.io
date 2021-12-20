@@ -6,11 +6,11 @@
 
 <ul>
 {% for post in posts %}
-  {% if post.tags contains 'xairo' %}
+  {% if post.categories contains 'xairo' %}
     {% if post.url == page.url %}
-      <li>Part {{post.partno}} - {{post.subtitle}}</li>
+    <li>Part {{post.partno}} - {{post.title}} <em>(this post)</em></li>
     {% else %}
-      <li><a class="page-link" href="{{ post.url | prepend: site.baseurl }}">Part {{post.partno}} - {{post.subtitle}}</a></li>
+      <li><a class="page-link" href="{{ post.url | prepend: site.baseurl }}">Part {{post.partno}} - {{post.title}}</a></li>
     {% endif %}
   {% endif %}
 {% endfor %}
